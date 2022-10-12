@@ -9,6 +9,51 @@
  for you to use if you need it!
  */
 
+function createEmployeeRecord(array){
+    return {
+        "firstName": array[0],
+        "familyName": array[1],
+        "title": array[2],
+        "payPerHour": array[3],
+        "timeInEvents": [],
+        "timeOutEvents": []
+    }
+}
+
+function createEmployeeRecords(nestedArray){
+    return nestedArray.map(employee => createEmployeeRecord(employee))
+}
+
+function createTimeInEvent(date){
+    this.timeInEvents.push({
+        "type": "TimeIn",
+        "hour": parseInt(date.substring(11)),
+        "date": date.substring(0, 10)
+    })
+    return this
+}
+
+function createTimeOutEvent(date){
+    this.timeOutEvents.push({
+        "type": "TimeOut",
+        "hour": parseInt(date.substring(11)),
+        "date": date.substring(0,10)
+    })
+    return this
+}
+
+function hoursWorkedOnDate(date){
+    const timeIn = this.timeInEvents.find(day => day.date === date).hour
+    const timeOut = this.timeOutEvents.find(day => day.date === date).hour
+    return (timeOut - timeIn) / 100
+}
+
+function wagesEarnedOnDate(date){
+    const hours = hoursWorkedOnDate.call(this, date)
+    return this.payPerHour * hours
+}
+
+
 const allWagesFor = function () {
     const eligibleDates = this.timeInEvents.map(function (e) {
         return e.date
@@ -21,3 +66,22 @@ const allWagesFor = function () {
     return payable
 }
 
+function findEmployeeByFirstName(srcArray, firstName){
+    let employee = srcArray.find(record =>{
+        if(record.firstName === firstName){
+            return true
+        }
+    })
+
+    return employee
+}
+
+function calculatePayroll(employeeRoster){
+    const totalWageArray = employeeRoster.map(employee =>allWagesFor.call(employee))
+
+    function counter(total, value){
+        return total += value
+    }
+
+    return totalWageArray.reduce(counter, 0)
+}
